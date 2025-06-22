@@ -39,6 +39,8 @@
             display: flex;
             align-items: center;
             font-family: 'Arial Black', sans-serif;
+            cursor: pointer;
+            position: relative;
         }
 
         .logo .suffix {
@@ -48,6 +50,26 @@
             vertical-align: super;
             position: relative;
             top: -5px;
+        }
+
+        .logo-popup {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background-color: rgba(0,0,0,0.8);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        .logo:hover .logo-popup {
+            opacity: 1;
+            top: -50px;
         }
 
         .search-container {
@@ -94,6 +116,22 @@
             text-align: center;
             margin-top: 5px;
             display: none;
+        }
+
+        .search-feedback {
+            position: absolute;
+            top: 50%;
+            left: 20px;
+            transform: translateY(-50%);
+            color: #767676;
+            font-size: 14px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .search-bar input:focus + .search-feedback {
+            opacity: 1;
         }
 
         .nav-icons {
@@ -394,11 +432,13 @@
         <header>
             <div class="logo" id="homeButton">
                 ShutR<span class="suffix">s.r</span>
+                <div class="logo-popup">Shutter By Roshan</div>
             </div>
             
             <div class="search-container">
                 <div class="search-bar">
                     <input type="text" id="searchInput" placeholder="Search photos, categories...">
+                    <div class="search-feedback" id="searchFeedback"></div>
                     <i class="fas fa-search" id="searchButton"></i>
                 </div>
                 <div class="search-error" id="searchError"></div>
@@ -419,43 +459,43 @@
             <div id="homeView">
                 <h2>Photo Categories</h2>
                 <div class="category-grid">
-                    <div class="category-card" data-category="macro" data-link="https://example.com/macro">
+                    <div class="category-card" data-category="macro" data-link="https://rosh776.github.io/Web-Macro/">
                         <img class="category-image" src="https://picsum.photos/id/306/600/600" alt="Macro">
                         <h3 class="category-title">Macro</h3>
                     </div>
-                    <div class="category-card" data-category="nature" data-link="https://example.com/nature">
+                    <div class="category-card" data-category="nature" data-link="https://rosh776.github.io/Web-Nature/">
                         <img class="category-image" src="https://picsum.photos/id/28/600/600" alt="Nature">
                         <h3 class="category-title">Nature</h3>
                     </div>
-                    <div class="category-card" data-category="animals" data-link="https://example.com/animals">
+                    <div class="category-card" data-category="animals" data-link="https://rosh776.github.io/Web-Animals/">
                         <img class="category-image" src="https://picsum.photos/id/237/600/600" alt="Animals">
                         <h3 class="category-title">Animals</h3>
                     </div>
-                    <div class="category-card" data-category="vehicles" data-link="https://example.com/vehicles">
+                    <div class="category-card" data-category="vehicles" data-link="https://rosh776.github.io/Web-Vechicles/">
                         <img class="category-image" src="https://picsum.photos/id/1072/600/600" alt="Vehicles">
                         <h3 class="category-title">Vehicles</h3>
                     </div>
-                    <div class="category-card" data-category="portrait" data-link="https://example.com/portrait">
+                    <div class="category-card" data-category="portrait" data-link="https://rosh776.github.io/Web-Potrait/">
                         <img class="category-image" src="https://picsum.photos/id/1005/600/600" alt="Portrait">
                         <h3 class="category-title">Portrait</h3>
                     </div>
-                    <div class="category-card" data-category="sunset" data-link="https://example.com/sunset">
+                    <div class="category-card" data-category="sunset" data-link="https://rosh776.github.io/Web-Sunset/">
                         <img class="category-image" src="https://picsum.photos/id/10/600/600" alt="Sunset">
                         <h3 class="category-title">Sunset</h3>
                     </div>
-                    <div class="category-card" data-category="ocean" data-link="https://example.com/ocean">
+                    <div class="category-card" data-category="ocean" data-link="https://rosh776.github.io/Web-Ocean/">
                         <img class="category-image" src="https://picsum.photos/id/1018/600/600" alt="Ocean">
                         <h3 class="category-title">Ocean</h3>
                     </div>
-                    <div class="category-card" data-category="urban" data-link="https://example.com/urban">
+                    <div class="category-card" data-category="urban" data-link="https://rosh776.github.io/Web-Urban/">
                         <img class="category-image" src="https://picsum.photos/id/1019/600/600" alt="Urban">
                         <h3 class="category-title">Urban</h3>
                     </div>
-                    <div class="category-card" data-category="wildlife" data-link="https://example.com/wildlife">
+                    <div class="category-card" data-category="wildlife" data-link="https://rosh776.github.io/Web-Wildlife/">
                         <img class="category-image" src="https://picsum.photos/id/1024/600/600" alt="Wildlife">
                         <h3 class="category-title">Wildlife</h3>
                     </div>
-                    <div class="category-card" data-category="random" data-link="https://example.com/random">
+                    <div class="category-card" data-category="random" data-link="https://rosh776.github.io/Web-Random/">
                         <img class="category-image" src="https://picsum.photos/id/103/600/600" alt="Random">
                         <h3 class="category-title">Random</h3>
                     </div>
@@ -551,11 +591,12 @@
         const nextButton = document.querySelector('.next-button');
         const themeToggle = document.getElementById('themeToggle');
         const categoryCards = document.querySelectorAll('.category-card');
-        const header = document.querySelector('.header');
+        const header = document.querySelector('header');
         const bgMusic = document.getElementById('bgMusic');
         const searchInput = document.getElementById('searchInput');
         const searchButton = document.getElementById('searchButton');
         const searchError = document.getElementById('searchError');
+        const searchFeedback = document.getElementById('searchFeedback');
 
         // Initialize the app
         function init() {
@@ -568,8 +609,28 @@
             nextButton.addEventListener('click', showNextImage);
             themeToggle.addEventListener('click', toggleTheme);
             searchButton.addEventListener('click', handleSearch);
+            
+            // Search input events
             searchInput.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') handleSearch();
+            });
+            
+            searchInput.addEventListener('input', (e) => {
+                if (searchInput.value.trim() !== '') {
+                    searchFeedback.textContent = `Searching for: ${searchInput.value}`;
+                } else {
+                    searchFeedback.textContent = '';
+                }
+            });
+            
+            searchInput.addEventListener('focus', () => {
+                if (searchInput.value.trim() !== '') {
+                    searchFeedback.textContent = `Searching for: ${searchInput.value}`;
+                }
+            });
+            
+            searchInput.addEventListener('blur', () => {
+                searchFeedback.textContent = '';
             });
             
             // Category card clicks
@@ -637,7 +698,6 @@
             }
         }
 
-        // [Rest of your JavaScript functions remain exactly the same]
         // Redirect to profile link
         function redirectToProfile() {
             window.location.href = "https://example.com/profile";
